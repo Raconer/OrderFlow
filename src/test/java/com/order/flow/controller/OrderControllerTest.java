@@ -1,5 +1,6 @@
 package com.order.flow.controller;
 
+import com.order.flow.testData.OrderTestData;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -14,18 +15,16 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @AutoConfigureMockMvc
 @ActiveProfiles({"test"})
 class OrderControllerTest {
-
   @Autowired private MockMvc mockMvc;
-
   private String PATH = "/order";
-
+  private OrderTestData testData = new OrderTestData();
   @Test
   void get() throws Exception {
     // GIVEN
-
+    var params = this.testData.getSearchData();
     // WHEN & THEN
     this.mockMvc
-        .perform(MockMvcRequestBuilders.get(this.PATH))
+        .perform(MockMvcRequestBuilders.get(this.PATH).params(params))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcResultHandlers.print());
   }
