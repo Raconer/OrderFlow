@@ -1,6 +1,7 @@
 package com.order.flow.controller;
 
 import com.order.flow.testData.OrderTestData;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -19,6 +20,7 @@ class OrderControllerTest {
   private String PATH = "/order";
   private OrderTestData testData = new OrderTestData();
   @Test
+  @DisplayName("주문 목록 조회")
   void get() throws Exception {
     // GIVEN
     var params = this.testData.getSearchData();
