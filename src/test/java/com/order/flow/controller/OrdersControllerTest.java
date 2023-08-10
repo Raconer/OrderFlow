@@ -48,12 +48,12 @@ class OrdersControllerTest {
     String jsonBody = objectMapper.writeValueAsString(ordersInsertDTO);
 
     this.mockMvc
-            .perform(
-                    MockMvcRequestBuilders.post(this.PATH)
-                            .contentType(MediaType.APPLICATION_JSON_VALUE)
-                            .content(jsonBody))
-            .andExpect(MockMvcResultMatchers.status().isBadRequest())
-            .andDo(MockMvcResultHandlers.print());
+        .perform(
+            MockMvcRequestBuilders.post(this.PATH)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonBody))
+        .andExpect(MockMvcResultMatchers.status().isBadRequest())
+        .andDo(MockMvcResultHandlers.print());
   }
 
   @Test

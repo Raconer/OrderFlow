@@ -27,7 +27,7 @@ public class OrderTestData {
   public OrdersInsertDTO postOrderData() {
 
     List<ItemInsertDTO> items =
-        IntStream.range(0, this.faker.number().numberBetween(0, 10))
+        IntStream.range(0, this.faker.number().numberBetween(5, 10))
             .mapToObj(i -> ItemInsertDTO.builder()
                     .id(this.faker.number().numberBetween(1L, 50L))
                     .quantity(this.faker.number().numberBetween(0, 10))

@@ -23,6 +23,8 @@ public class OrdersController {
   @PostMapping
   public ResponseEntity<?> order(@Valid @RequestBody OrdersInsertDTO order) {
 
+    this.ordersService.insert(order);
+
     return ResponseEntity.ok("SUCCESS");
   }
 

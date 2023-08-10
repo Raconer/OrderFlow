@@ -7,10 +7,16 @@ import com.order.flow.data.entity.users.Users;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
+
+import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 @Entity
+@Setter
 @Getter
+@RequiredArgsConstructor
 @Table(name = "orders")
 public class Orders extends Common {
   @Id
@@ -31,7 +37,7 @@ public class Orders extends Common {
   @JoinColumn(name = "user_id")
   private Users user;
 
-  @OneToMany(cascade = CascadeType.ALL)
-  @JoinColumn(name = "order_id")
-  private List<OrdersItem> orderItem;
+  @OneToMany(cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "orders_id")
+  private List<OrdersItem> ordersItem;
 }

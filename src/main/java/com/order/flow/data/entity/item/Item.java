@@ -3,10 +3,10 @@ package com.order.flow.data.entity.item;
 import com.order.flow.data.entity.Common;
 import com.order.flow.data.entity.company.Company;
 import jakarta.persistence.*;
-import lombok.Getter;
+import lombok.Setter;
 
 @Entity
-@Getter
+@Setter
 @Table(name = "item")
 public class Item extends Common {
   @Id

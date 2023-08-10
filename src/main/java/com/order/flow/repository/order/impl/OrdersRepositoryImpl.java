@@ -1,14 +1,21 @@
 package com.order.flow.repository.order.impl;
 
+import com.order.flow.constant.OrdersStatus;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
+import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.data.dto.orderItem.OrderItemDataDTO;
 import com.order.flow.data.entity.company.QCompany;
 import com.order.flow.data.entity.item.QItem;
 import com.order.flow.data.entity.order.QOrders;
 import com.order.flow.data.entity.orderItem.QOrdersItem;
+import com.order.flow.data.entity.users.QUsers;
 import com.querydsl.core.types.Projections;
+import com.querydsl.jpa.impl.JPAInsertClause;
 import com.querydsl.jpa.impl.JPAQueryFactory;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -46,7 +53,7 @@ public class OrdersRepositoryImpl {
                             qOrdersItem.item.company.name,
                             qOrdersItem.item.name))))
             .from(qOrders)
-            .join(qOrders.orderItem, qOrdersItem)
+            .join(qOrders.ordersItem, qOrdersItem)
             .join(qOrdersItem.item, qItem)
             .join(qItem.company, qCompany)
             .where(qOrders.id.eq(id))
