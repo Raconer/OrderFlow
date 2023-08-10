@@ -57,7 +57,7 @@ class OrdersControllerTest {
   }
 
   @Test
-  @DisplayName("주문 목록 조회")
+  @DisplayName("주문 단건 조회")
   void get() throws Exception {
     // GIVEN
     Long id = 1L;

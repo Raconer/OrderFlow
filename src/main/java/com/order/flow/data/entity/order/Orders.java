@@ -7,8 +7,6 @@ import com.order.flow.data.entity.users.Users;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
-
-import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
