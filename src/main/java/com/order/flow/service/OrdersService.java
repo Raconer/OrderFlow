@@ -1,6 +1,7 @@
 package com.order.flow.service;
 
 import com.order.flow.constant.OrdersStatus;
+import com.order.flow.data.dto.PageDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
@@ -74,7 +75,7 @@ public class OrdersService {
   }
 
   @Transactional(readOnly = true)
-  public List<OrdersInfoDTO> getList() {
-    return this.ordersRepositoryImpl.getSearchList();
+  public List<OrdersInfoDTO> getList(PageDTO pageDTO) {
+    return this.ordersRepositoryImpl.getSearchList(pageDTO);
   }
 }

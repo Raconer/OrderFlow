@@ -1,21 +1,15 @@
 package com.order.flow.repository.order.impl;
 
-import com.order.flow.constant.OrdersStatus;
+import com.order.flow.data.dto.PageDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
-import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.data.dto.orderItem.OrderItemDataDTO;
 import com.order.flow.data.entity.company.QCompany;
 import com.order.flow.data.entity.item.QItem;
 import com.order.flow.data.entity.order.QOrders;
 import com.order.flow.data.entity.orderItem.QOrdersItem;
-import com.order.flow.data.entity.users.QUsers;
 import com.querydsl.core.types.Projections;
-import com.querydsl.jpa.impl.JPAInsertClause;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-
-import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -61,9 +55,9 @@ public class OrdersRepositoryImpl {
     return orderDataDTO;
   }
 
-  public List<OrdersInfoDTO> getSearchList() {
+  public List<OrdersInfoDTO> getSearchList(PageDTO pageDTO) {
     Sort sort = Sort.by(Sort.Direction.ASC, "regDate");
-    Pageable pageable = PageRequest.of(1, 10, sort);
+    Pageable pageable = PageRequest.of(pageDTO.getPage(), pageDTO.getSize(), sort);
 
     QOrders qOrders = QOrders.orders;
     List<OrdersInfoDTO> ordersInfoDTOS =
