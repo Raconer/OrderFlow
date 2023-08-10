@@ -1,22 +1,22 @@
 package com.order.flow.service;
 
+import com.order.flow.common.exception.ItemAlreadySoldException;
 import com.order.flow.constant.OrdersStatus;
 import com.order.flow.data.dto.PageDTO;
+import com.order.flow.data.dto.item.ItemInsertDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.data.entity.item.Item;
 import com.order.flow.data.entity.order.Orders;
-import com.order.flow.data.entity.orderItem.OrdersItem;
 import com.order.flow.data.entity.users.Users;
+import com.order.flow.repository.item.impl.ItemRepositoryImpl;
 import com.order.flow.repository.order.OrdersRepository;
 import com.order.flow.repository.order.impl.OrdersRepositoryImpl;
-import com.order.flow.repository.orderItem.OrdersItemRepository;
 import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.stereotype.Service;
@@ -27,19 +27,42 @@ import org.springframework.transaction.annotation.Transactional;
 @AllArgsConstructor
 public class OrdersService {
   private OrdersRepository ordersRepository;
-  private OrdersItemRepository ordersItemRepository;
   private OrdersRepositoryImpl ordersRepositoryImpl;
-  @Transactional(isolation = Isolation.READ_COMMITTED)
+  private OrdersItemService ordersItemService;
+  private ItemService itemService;
+  private ItemRepositoryImpl itemRepositoryImpl;
+
+  @Transactional(
+      isolation = Isolation.READ_COMMITTED,
+      rollbackFor = {ItemAlreadySoldException.class, Exception.class})
   @BatchSize(size = 100)
   public void insert(OrdersInsertDTO ordersInsert) {
     Users users = new Users();
     users.setId(ordersInsert.userId());
-
     Orders orders = createOrder(ordersInsert, users);
-    List<OrdersItem> ordersItems = createOrderItems(ordersInsert, orders);
+
+    List<ItemInsertDTO> itemInsertDTOS = ordersInsert.items();
+    List<Long> itemIds = itemInsertDTOS.stream().map(it -> it.id()).collect(Collectors.toList());
+    List<Item> items = this.itemRepositoryImpl.getByIdList(itemIds);
+
+    itemInsertDTOS.forEach(
+        itemInsertDTO -> {
+          Item item =
+              items.stream().filter(it -> it.getId().equals(itemInsertDTO.id())).findFirst().get();
+          item.setQuantity(item.getQuantity() - itemInsertDTO.quantity());
+          if (item.getQuantity() <= 0) {
+            throw new ItemAlreadySoldException();
+          }
+
+          items.add(item);
+          int amount = orders.getOrderAmount() + (item.getPrice() * itemInsertDTO.quantity());
+          orders.setOrderAmount(amount);
+        });
+
+    this.itemService.saveAll(items);
 
     this.ordersRepository.save(orders);
-    this.ordersItemRepository.saveAll(ordersItems);
+    this.ordersItemService.insertList(ordersInsert.items(), orders);
   }
 
   private Orders createOrder(OrdersInsertDTO ordersInsert, Users users) {
@@ -50,23 +73,6 @@ public class OrdersService {
     orders.setUser(users);
     orders.setRegDate(LocalDateTime.now());
     return orders;
-  }
-
-  private List<OrdersItem> createOrderItems(OrdersInsertDTO ordersInsert, Orders orders) {
-    return ordersInsert.items().stream()
-        .map(
-            it -> {
-              Item item = new Item();
-              item.setId(it.id());
-              OrdersItem ordersItem = new OrdersItem();
-              ordersItem.setItem(item);
-              ordersItem.setOrders(orders);
-              ordersItem.setQuantity(it.quantity());
-              ordersItem.setTotalAmount(10.0);
-              ordersItem.setRegDate(LocalDateTime.now());
-              return ordersItem;
-            })
-        .collect(Collectors.toList());
   }
 
   @Transactional(readOnly = true)

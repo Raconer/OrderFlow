@@ -3,10 +3,12 @@ package com.order.flow.data.entity.item;
 import com.order.flow.data.entity.Common;
 import com.order.flow.data.entity.company.Company;
 import jakarta.persistence.*;
+import lombok.Getter;
 import lombok.Setter;
 
 @Entity
 @Setter
+@Getter
 @Table(name = "item")
 public class Item extends Common {
   @Id
@@ -14,7 +16,7 @@ public class Item extends Common {
   @Column
   private Long id;
 
-  @ManyToOne
+  @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "company_id")
   private Company company;
 

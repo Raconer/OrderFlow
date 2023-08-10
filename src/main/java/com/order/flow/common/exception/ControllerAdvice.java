@@ -37,4 +37,9 @@ public class ControllerAdvice extends ResponseEntityExceptionHandler {
 
         return CommonRes.Except(HttpStatus.BAD_REQUEST, "같은 상품을 중복 요청 하였습니다.");
     }
+
+    @ExceptionHandler(ItemAlreadySoldException.class)
+    public ResponseEntity<String> handleItemAlreadySoldException(ItemAlreadySoldException ex) {
+        return new ResponseEntity<>(ex.getMessage(), HttpStatus.BAD_REQUEST);
+    }
 }
