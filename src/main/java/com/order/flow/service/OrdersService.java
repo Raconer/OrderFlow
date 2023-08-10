@@ -9,18 +9,14 @@ import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.data.entity.item.Item;
 import com.order.flow.data.entity.order.Orders;
-import com.order.flow.data.entity.orderItem.OrdersItem;
 import com.order.flow.data.entity.users.Users;
-import com.order.flow.repository.item.ItemRepository;
+import com.order.flow.repository.item.impl.ItemRepositoryImpl;
 import com.order.flow.repository.order.OrdersRepository;
 import com.order.flow.repository.order.impl.OrdersRepositoryImpl;
-import com.order.flow.repository.orderItem.OrdersItemRepository;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import lombok.AllArgsConstructor;
 import org.hibernate.annotations.BatchSize;
 import org.springframework.stereotype.Service;
@@ -34,6 +30,7 @@ public class OrdersService {
   private OrdersRepositoryImpl ordersRepositoryImpl;
   private OrdersItemService ordersItemService;
   private ItemService itemService;
+  private ItemRepositoryImpl itemRepositoryImpl;
 
   @Transactional(
       isolation = Isolation.READ_COMMITTED,
@@ -43,22 +40,25 @@ public class OrdersService {
     Users users = new Users();
     users.setId(ordersInsert.userId());
     Orders orders = createOrder(ordersInsert, users);
-    List<ItemInsertDTO> itemList = ordersInsert.items();
-    List<Item> items = new ArrayList<>();
 
+    List<ItemInsertDTO> itemInsertDTOS = ordersInsert.items();
+    List<Long> itemIds = itemInsertDTOS.stream().map(it -> it.id()).collect(Collectors.toList());
+    List<Item> items = this.itemRepositoryImpl.getByIdList(itemIds);
 
-    itemList.forEach(
-        it -> {
-          Item item = this.itemService.getById(it.id());
-          item.setQuantity(item.getQuantity() - it.quantity());
+    itemInsertDTOS.forEach(
+        itemInsertDTO -> {
+          Item item =
+              items.stream().filter(it -> it.getId().equals(itemInsertDTO.id())).findFirst().get();
+          item.setQuantity(item.getQuantity() - itemInsertDTO.quantity());
           if (item.getQuantity() <= 0) {
             throw new ItemAlreadySoldException();
           }
-          items.add(item);
-          int amount = orders.getOrderAmount() + (item.getPrice() * it.quantity());
-          orders.setOrderAmount(amount);
 
+          items.add(item);
+          int amount = orders.getOrderAmount() + (item.getPrice() * itemInsertDTO.quantity());
+          orders.setOrderAmount(amount);
         });
+
     this.itemService.saveAll(items);
 
     this.ordersRepository.save(orders);
