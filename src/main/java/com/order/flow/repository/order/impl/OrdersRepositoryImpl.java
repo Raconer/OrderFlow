@@ -37,21 +37,28 @@ public class OrdersRepositoryImpl {
                     qOrders.orderDate,
                     qOrders.ordersStatus,
                     qOrders.orderAmount,
-                    qOrders.deliveryAddress,
-                    Projections.list(
-                        Projections.constructor(
-                            OrderItemDataDTO.class,
-                            qOrdersItem.id,
-                            qOrdersItem.quantity,
-                            qOrdersItem.totalAmount,
-                            qOrdersItem.item.company.name,
-                            qOrdersItem.item.name))))
+                    qOrders.deliveryAddress))
             .from(qOrders)
-            .join(qOrders.ordersItem, qOrdersItem)
-            .join(qOrdersItem.item, qItem)
-            .join(qItem.company, qCompany)
             .where(qOrders.id.eq(id))
             .fetchOne();
+
+    List<OrderItemDataDTO> orderItemDataDTOS =
+        this.queryFactory
+            .select(
+                Projections.constructor(
+                    OrderItemDataDTO.class,
+                    qOrdersItem.id,
+                    qOrdersItem.quantity,
+                    qOrdersItem.totalAmount,
+                    qCompany.name,
+                    qItem.name))
+            .from(qOrdersItem)
+            .join(qOrdersItem.item, qItem)
+            .join(qItem.company, qCompany)
+            .where(qOrdersItem.orders.id.eq(id))
+            .fetch();
+
+    orderDataDTO.setOrderItem(orderItemDataDTOS);
     return orderDataDTO;
   }
 
