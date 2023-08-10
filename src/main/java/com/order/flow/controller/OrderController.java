@@ -34,8 +34,8 @@ public class OrderController {
   /** 주문 단건 조회 */
   @GetMapping("/{id}")
   public ResponseEntity<?> get(@PathVariable Long id) {
-    List<OrderDataDTO> orders = this.orderService.get(id);
-    return ResponseEntity.ok(orders);
+    OrderDataDTO order = this.orderService.get(id);
+    return ResponseEntity.ok(order);
   }
 
   /** 주문 목록 조회 */
