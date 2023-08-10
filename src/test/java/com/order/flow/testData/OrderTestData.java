@@ -1,6 +1,8 @@
 package com.order.flow.testData;
 
 import com.order.flow.data.dto.item.ItemInsertDTO;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -14,6 +16,14 @@ public class OrderTestData {
   private MultiValueMap<String, String> params = new LinkedMultiValueMap();
   private Faker faker = new Faker();
 
+  public OrdersInsertDTO postOrderValidData() {
+    List<ItemInsertDTO> items = new ArrayList<>();
+
+    return OrdersInsertDTO.builder()
+            .items(items)
+            .build();
+  }
+
   public OrdersInsertDTO postOrderData() {
 
     List<ItemInsertDTO> items =
@@ -26,6 +36,7 @@ public class OrderTestData {
 
     return OrdersInsertDTO.builder()
             .userId(this.faker.number().numberBetween(6L, 10L))
+            .deliveryAddress(this.faker.address().streetAddress())
             .items(items)
             .build();
   }

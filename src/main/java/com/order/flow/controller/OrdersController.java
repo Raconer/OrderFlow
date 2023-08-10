@@ -5,6 +5,7 @@ import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.service.OrdersService;
+import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,11 +20,11 @@ public class OrdersController {
   /*
    * 주문 접수처리
    */
-    @PostMapping
-    public ResponseEntity<?> order(@RequestBody OrdersInsertDTO order){
+  @PostMapping
+  public ResponseEntity<?> order(@Valid @RequestBody OrdersInsertDTO order) {
 
-      return ResponseEntity.ok("SUCCESS");
-    }
+    return ResponseEntity.ok("SUCCESS");
+  }
 
   /*
    * 주문 완료처리

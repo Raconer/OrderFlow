@@ -41,6 +41,22 @@ class OrdersControllerTest {
   }
 
   @Test
+  @DisplayName("구매자 주문 요청 Validate Test")
+  void postValid() throws Exception {
+    // GIVEN
+    OrdersInsertDTO ordersInsertDTO = this.testData.postOrderValidData();
+    String jsonBody = objectMapper.writeValueAsString(ordersInsertDTO);
+
+    this.mockMvc
+            .perform(
+                    MockMvcRequestBuilders.post(this.PATH)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(jsonBody))
+            .andExpect(MockMvcResultMatchers.status().isBadRequest())
+            .andDo(MockMvcResultHandlers.print());
+  }
+
+  @Test
   @DisplayName("주문 목록 조회")
   void get() throws Exception {
     // GIVEN
