@@ -1,4 +1,4 @@
-package com.order.flow.data.entity.orders.projections;
+package com.order.flow.data.dto.orders;
 
 import com.order.flow.constant.OrderStatus;
 import lombok.AllArgsConstructor;
@@ -10,7 +10,7 @@ import java.util.Date;
 @ToString
 @Getter
 @AllArgsConstructor
-public class OrderInfo {
+public class OrderInfoDTO {
   private Long id;
   private Date orderDate;
   private OrderStatus orderStatus;

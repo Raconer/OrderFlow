@@ -4,10 +4,12 @@ import com.order.flow.data.entity.Common;
 import com.order.flow.data.entity.item.Item;
 import com.order.flow.data.entity.users.Users;
 import jakarta.persistence.*;
+import lombok.Getter;
 
 import java.util.List;
 
 @Entity
+@Getter
 @Table(name = "company")
 public class Company extends Common {
     @Id

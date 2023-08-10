@@ -19,9 +19,21 @@ class OrderControllerTest {
   @Autowired private MockMvc mockMvc;
   private String PATH = "/order";
   private OrderTestData testData = new OrderTestData();
+
   @Test
   @DisplayName("주문 목록 조회")
   void get() throws Exception {
+    // GIVEN
+    Long id = 1L;
+    // WHEN & THEN
+    this.mockMvc
+            .perform(MockMvcRequestBuilders.get(this.PATH+"/" + id))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andDo(MockMvcResultHandlers.print());
+  }
+  @Test
+  @DisplayName("주문 목록 조회")
+  void getList() throws Exception {
     // GIVEN
     var params = this.testData.getSearchData();
     // WHEN & THEN
