@@ -1,5 +1,6 @@
 package com.order.flow.repository.order.orderImpl;
 
+import com.order.flow.data.dto.PageDTO;
 import com.order.flow.data.dto.orderItem.OrderItemDataDTO;
 import com.order.flow.data.dto.orders.OrderDataDTO;
 import com.order.flow.data.dto.orders.OrderInfoDTO;
@@ -57,9 +58,9 @@ public class OrderRepositoryImpl {
     return orderDataDTO;
   }
 
-  public  List<OrderInfoDTO> getSearchList(){
+  public  List<OrderInfoDTO> getSearchList(PageDTO pageDTO){
       Sort sort = Sort.by(Sort.Direction.ASC, "regDate");
-      Pageable pageable = PageRequest.of(1, 10, sort);
+    Pageable pageable = PageRequest.of(pageDTO.getPage(), pageDTO.getSize(), sort);
 
       QOrders qOrders = QOrders.orders;
       List<OrderInfoDTO> OrderInfoDTOs =
