@@ -2,14 +2,14 @@ package com.order.flow.data.entity.orderItem;
 
 import com.order.flow.data.entity.Common;
 import com.order.flow.data.entity.item.Item;
-import com.order.flow.data.entity.orders.Orders;
+import com.order.flow.data.entity.order.Orders;
 import jakarta.persistence.*;
 import lombok.Getter;
 
 @Entity
 @Getter
-@Table(name = "order_items")
-public class OrderItem extends Common {
+@Table(name = "orders_items")
+public class OrdersItem extends Common {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column
@@ -18,11 +18,11 @@ public class OrderItem extends Common {
   @Column private Integer quantity;
   @Column private Double totalAmount;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "order_id")
+  @ManyToOne
+  @JoinColumn(name = "orders_id")
   private Orders orders;
 
-  @OneToOne(fetch = FetchType.LAZY)
+  @OneToOne
   @JoinColumn(name = "item_id")
   private Item item;
 }

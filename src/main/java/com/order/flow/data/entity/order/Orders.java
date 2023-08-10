@@ -1,8 +1,9 @@
-package com.order.flow.data.entity.orders;
+package com.order.flow.data.entity.order;
 
-import com.order.flow.constant.OrderStatus;
+import com.order.flow.constant.OrdersStatus;
 import com.order.flow.data.entity.Common;
-import com.order.flow.data.entity.orderItem.OrderItem;
+import com.order.flow.data.entity.orderItem.OrdersItem;
+import com.order.flow.data.entity.users.Users;
 import jakarta.persistence.*;
 import java.util.Date;
 import java.util.List;
@@ -21,12 +22,16 @@ public class Orders extends Common {
 
   @Column
   @Enumerated(EnumType.STRING)
-  private OrderStatus orderStatus;
+  private OrdersStatus ordersStatus;
 
   @Column private int orderAmount;
   @Column private String deliveryAddress;
 
-  @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private Users user;
+
+  @OneToMany(cascade = CascadeType.ALL)
   @JoinColumn(name = "order_id")
-  private List<OrderItem> orderItem;
+  private List<OrdersItem> orderItem;
 }

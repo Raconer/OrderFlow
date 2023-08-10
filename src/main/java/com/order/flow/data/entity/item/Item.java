@@ -14,7 +14,7 @@ public class Item extends Common {
   @Column
   private Long id;
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne
   @JoinColumn(name = "company_id")
   private Company company;
 

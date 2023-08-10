@@ -1,16 +1,39 @@
 package com.order.flow.testData;
 
+import com.order.flow.data.dto.item.ItemInsertDTO;
+import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
+
+import com.order.flow.data.dto.order.OrdersInsertDTO;
+import net.datafaker.Faker;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 public class OrderTestData {
+  private MultiValueMap<String, String> params = new LinkedMultiValueMap();
+  private Faker faker = new Faker();
 
-    private MultiValueMap<String, String> params = new LinkedMultiValueMap();
+  public OrdersInsertDTO postOrderData() {
 
-    public MultiValueMap<String, String> getSearchData(){
-        this.params.add("page", Integer.toString(1));
-        this.params.add("size", Integer.toString(30));
+    List<ItemInsertDTO> items =
+        IntStream.range(0, this.faker.number().numberBetween(0, 10))
+            .mapToObj(i -> ItemInsertDTO.builder()
+                    .id(this.faker.number().numberBetween(1L, 50L))
+                    .quantity(this.faker.number().numberBetween(0, 10))
+                    .build())
+            .collect(Collectors.toList());
 
-        return params;
-    }
+    return OrdersInsertDTO.builder()
+            .userId(this.faker.number().numberBetween(6L, 10L))
+            .items(items)
+            .build();
+  }
+
+  public MultiValueMap<String, String> getSearchData() {
+    this.params.add("page", Integer.toString(1));
+    this.params.add("size", Integer.toString(30));
+
+    return params;
+  }
 }

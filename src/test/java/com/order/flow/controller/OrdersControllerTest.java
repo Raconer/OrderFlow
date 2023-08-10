@@ -1,11 +1,14 @@
 package com.order.flow.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.testData.OrderTestData;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
@@ -15,10 +18,27 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 @SpringBootTest
 @AutoConfigureMockMvc
 @ActiveProfiles({"test"})
-class OrderControllerTest {
+class OrdersControllerTest {
   @Autowired private MockMvc mockMvc;
-  private String PATH = "/order";
+  private String PATH = "/orders";
   private OrderTestData testData = new OrderTestData();
+  private ObjectMapper objectMapper = new ObjectMapper();
+
+  @Test
+  @DisplayName("구매자 주문 요청")
+  void post() throws Exception {
+    // GIVEN
+    OrdersInsertDTO ordersInsertDTO = this.testData.postOrderData();
+    String jsonBody = objectMapper.writeValueAsString(ordersInsertDTO);
+
+    this.mockMvc
+        .perform(
+            MockMvcRequestBuilders.post(this.PATH)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonBody))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(MockMvcResultHandlers.print());
+  }
 
   @Test
   @DisplayName("주문 목록 조회")
@@ -27,10 +47,11 @@ class OrderControllerTest {
     Long id = 1L;
     // WHEN & THEN
     this.mockMvc
-            .perform(MockMvcRequestBuilders.get(this.PATH+"/" + id))
-            .andExpect(MockMvcResultMatchers.status().isOk())
-            .andDo(MockMvcResultHandlers.print());
+        .perform(MockMvcRequestBuilders.get(this.PATH + "/" + id))
+        .andExpect(MockMvcResultMatchers.status().isOk())
+        .andDo(MockMvcResultHandlers.print());
   }
+
   @Test
   @DisplayName("주문 목록 조회")
   void getList() throws Exception {
