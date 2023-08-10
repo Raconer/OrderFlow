@@ -1,6 +1,6 @@
-package com.order.flow.data.dto.orders;
+package com.order.flow.data.dto.order;
 
-import com.order.flow.constant.OrderStatus;
+import com.order.flow.constant.OrdersStatus;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.ToString;
@@ -10,10 +10,10 @@ import java.util.Date;
 @ToString
 @Getter
 @AllArgsConstructor
-public class OrderInfoDTO {
+public class OrdersInfoDTO {
   private Long id;
   private Date orderDate;
-  private OrderStatus orderStatus;
+  private OrdersStatus ordersStatus;
   private int orderAmount;
   private String deliveryAddress;
 }

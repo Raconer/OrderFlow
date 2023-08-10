@@ -1,4 +1,4 @@
-package com.order.flow.repository.order.orderImpl;
+package com.order.flow.repository.order.impl;
 
 import com.order.flow.data.dto.PageDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
@@ -19,12 +19,12 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 @AllArgsConstructor
-public class OrderRepositoryImpl {
+public class OrdersRepositoryImpl {
   private final JPAQueryFactory queryFactory;
 
   public OrdersDataDTO getById(long id) {
     QOrders qOrders = QOrders.orders;
-    QOrdersItem qOrderItem = QOrdersItem.ordersItem;
+    QOrdersItem qOrdersItem = QOrdersItem.ordersItem;
     QItem qItem = QItem.item;
     QCompany qCompany = QCompany.company;
 
@@ -41,40 +41,41 @@ public class OrderRepositoryImpl {
                     Projections.list(
                         Projections.constructor(
                             OrderItemDataDTO.class,
-                            qOrderItem.id,
-                            qOrderItem.quantity,
-                            qOrderItem.totalAmount,
-                            qOrderItem.item.company.name,
-                            qOrderItem.item.name))))
+                            qOrdersItem.id,
+                            qOrdersItem.quantity,
+                            qOrdersItem.totalAmount,
+                            qOrdersItem.item.company.name,
+                            qOrdersItem.item.name))))
             .from(qOrders)
-            .join(qOrders.ordersItem, qOrderItem)
-            .join(qOrderItem.item, qItem)
+            .join(qOrders.ordersItem, qOrdersItem)
+            .join(qOrdersItem.item, qItem)
             .join(qItem.company, qCompany)
             .where(qOrders.id.eq(id))
             .fetchOne();
     return orderDataDTO;
   }
 
-  public  List<OrdersInfoDTO> getSearchList(PageDTO pageDTO){
-      Sort sort = Sort.by(Sort.Direction.ASC, "regDate");
+  public List<OrdersInfoDTO> getSearchList(PageDTO pageDTO) {
+    Sort sort = Sort.by(Sort.Direction.ASC, "regDate");
     Pageable pageable = PageRequest.of(pageDTO.getPage(), pageDTO.getSize(), sort);
 
-      QOrders qOrders = QOrders.orders;
-      List<OrdersInfoDTO> OrderInfoDTOs =
-              this.queryFactory
-                      .select(
-                              Projections.constructor(
-                                      OrdersInfoDTO.class,
-                                      qOrders.id,
-                                      qOrders.orderDate,
-                                      qOrders.ordersStatus,
-                                      qOrders.orderAmount,
-                                      qOrders.deliveryAddress))
-                      .from(qOrders)
-                      .offset(pageable.getOffset())
-                      .limit(pageable.getPageSize())
-                      .orderBy(qOrders.regDate.desc()).fetch();
+    QOrders qOrders = QOrders.orders;
+    List<OrdersInfoDTO> ordersInfoDTOS =
+        this.queryFactory
+            .select(
+                Projections.constructor(
+                    OrdersInfoDTO.class,
+                    qOrders.id,
+                    qOrders.orderDate,
+                    qOrders.ordersStatus,
+                    qOrders.orderAmount,
+                    qOrders.deliveryAddress))
+            .from(qOrders)
+            .offset(pageable.getOffset())
+            .limit(pageable.getPageSize())
+            .orderBy(qOrders.regDate.desc())
+            .fetch();
 
-      return OrderInfoDTOs;
+    return ordersInfoDTOS;
   }
 }

@@ -8,4 +8,8 @@ import lombok.Setter;
 public class PageDTO {
   private int page = 1;
   private int size = 10;
+
+  public void setPage(int page) {
+    this.page = page - 1;
+  }
 }
