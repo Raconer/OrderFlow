@@ -1,6 +1,6 @@
 package com.order.flow.constant;
 
-public enum OrderStatus {
+public enum OrdersStatus {
     PENDING,
     COMPLETED
 }
