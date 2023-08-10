@@ -4,6 +4,7 @@ import com.order.flow.common.exception.ItemAlreadySoldException;
 import com.order.flow.constant.OrdersStatus;
 import com.order.flow.data.dto.PageDTO;
 import com.order.flow.data.dto.item.ItemInsertDTO;
+import com.order.flow.data.dto.order.OrderSuccessDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
@@ -83,5 +84,15 @@ public class OrdersService {
   @Transactional(readOnly = true)
   public List<OrdersInfoDTO> getList(PageDTO pageDTO) {
     return this.ordersRepositoryImpl.getSearchList(pageDTO);
+  }
+
+  @Transactional(
+          isolation = Isolation.READ_COMMITTED,
+          rollbackFor = {ItemAlreadySoldException.class, Exception.class})
+  public void update(OrderSuccessDTO orderSuccessDTO){
+    Orders orders = new Orders();
+    orders.setId(orderSuccessDTO.id());
+    orders.setOrdersStatus(OrdersStatus.COMPLETED);
+    this.ordersRepository.save(orders);
   }
 }

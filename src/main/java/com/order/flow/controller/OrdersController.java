@@ -1,6 +1,7 @@
 package com.order.flow.controller;
 
 import com.order.flow.data.dto.PageDTO;
+import com.order.flow.data.dto.order.OrderSuccessDTO;
 import com.order.flow.data.dto.order.OrdersDataDTO;
 import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
@@ -29,14 +30,6 @@ public class OrdersController {
     return ResponseEntity.ok("SUCCESS");
   }
 
-  /*
-   * 주문 완료처리
-   */
-  //  @PostMapping("/status")
-  //  public ResponseEntity<?> orderSuccess(){
-  //    return ResponseEntity.ok("SUCCESS");
-  //  }
-
   /** 주문 단건 조회 */
   @GetMapping("/{id}")
   public ResponseEntity<?> get(@PathVariable Long id) {
@@ -49,5 +42,14 @@ public class OrdersController {
   public ResponseEntity<?> getList(@ModelAttribute PageDTO pageDTO) {
     List<OrdersInfoDTO> page = this.ordersService.getList(pageDTO);
     return ResponseEntity.ok(page);
+  }
+
+  /*
+   * 주문 완료처리
+   */
+  @PutMapping
+  public ResponseEntity<?> orderSuccess(@RequestBody OrderSuccessDTO orderSuccessDTO) {
+    this.ordersService.update(orderSuccessDTO);
+    return ResponseEntity.ok("SUCCESS");
   }
 }

@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
+import com.order.flow.data.dto.order.OrderSuccessDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import net.datafaker.Faker;
 import org.springframework.util.LinkedMultiValueMap;
@@ -46,5 +47,11 @@ public class OrderTestData {
     this.params.add("size", Integer.toString(30));
 
     return params;
+  }
+
+  public OrderSuccessDTO putData(){
+    return OrderSuccessDTO.builder()
+            .id(1L)
+            .build();
   }
 }

@@ -1,6 +1,7 @@
 package com.order.flow.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.order.flow.data.dto.order.OrderSuccessDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.testData.OrderTestData;
 import org.junit.jupiter.api.DisplayName;
@@ -78,5 +79,21 @@ class OrdersControllerTest {
         .perform(MockMvcRequestBuilders.get(this.PATH).params(params))
         .andExpect(MockMvcResultMatchers.status().isOk())
         .andDo(MockMvcResultHandlers.print());
+  }
+
+  @Test
+  @DisplayName("판매자 주문 완료")
+  void put() throws Exception {
+    // GIVEN
+    OrderSuccessDTO orderSuccessDTO = this.testData.putData();
+    String jsonBody = objectMapper.writeValueAsString(orderSuccessDTO);
+
+    this.mockMvc
+            .perform(
+                    MockMvcRequestBuilders.put(this.PATH)
+                            .contentType(MediaType.APPLICATION_JSON_VALUE)
+                            .content(jsonBody))
+            .andExpect(MockMvcResultMatchers.status().isOk())
+            .andDo(MockMvcResultHandlers.print());
   }
 }
