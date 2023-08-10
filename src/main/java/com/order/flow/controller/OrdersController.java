@@ -46,7 +46,7 @@ public class OrdersController {
   /** 주문 목록 조회 */
   @GetMapping
   public ResponseEntity<?> getList(@ModelAttribute PageDTO pageDTO) {
-    List<OrdersInfoDTO> page = this.ordersService.getList();
+    List<OrderInfoDTO> page = this.orderService.getList(pageDTO);
     return ResponseEntity.ok(page);
   }
 }
