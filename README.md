@@ -1,6 +1,21 @@
 # 주문 관리 시스템
 
 ## 기본 설명
+
+### API
+* API
+  * POST /orders
+    * 주문 접수처리 : 구매자가 주문 접수
+  * GET /orders/{id}
+    * 단일 주문조회
+  * GET /orders
+    * 주문 목록조회
+  * PUT /orders
+    * 주문 완료처리 : 판매자가 주문 완료
+* 테스트
+  * test.java.com.order.flow.OrdersControllerTest.java 에서 실행 및 결과 확인
+    * 주문 접수 처리시 재고 부족시 : Exception 처리 (Random Data이다 보니 성공시 Check 만 현재 구현)
+    * Multi Thread로 동시성 테스트 필요 -> // TODO
 ### Branch
 * master
   * feature/** 개발 완료 된 Branch Core
@@ -102,17 +117,6 @@
                            └─ testData
                                  └─ OrderTestData.java ## 테스트 용 데이터
 ```
-## API
-* API
-  * POST /orders
-    * 주문 접수처리 : 구매자가 주문 접수
-  * GET /orders/{id}
-    * 단일 주문조회
-  * GET /orders
-    * 주문 목록조회
-  * PUT /orders
-    * 주문 완료처리 : 판매자가 주문 완료
-
 ## Build Spec
 * JDK
   * temurin jdk 20
