@@ -180,6 +180,6 @@
 > 데이터를 Insert 할때 동시성을 방지 할떄 격리 수준을 높이 거나 낙과적인 락을 사용한다.<br>
 > JPA에서 낙관적인 락을 설정 하기 위해 @Version을 사용한다.<br>
 > 하지만 지금은 기본 설정을 기준으로 하였기 때문에  isolation = Isolation.READ_COMMITTED 으로 설정하여 이전 데이터가 Commit이 끝날때 까지 데이터가 변경되지 않도록 설정 하였다.<br>
-> 이러면 DB에 부담이 가는 설정이므로 @Version으로 관리를 하는 방식으로 변경 예정이다.
+> 이러면 DB에 부담이 가는 설정이므로 @Version으로 관리를 하는 방식으로 변경 예정이다.<br>
 > 참고_1 : [DB 격리 수준](https://raconer.tistory.com/entry/DB-%EA%B2%A9%EB%A6%AC-%EC%88%98%EC%A4%80ACID-Isolation)<br>
 > 참고_2 : [낙관적인 락 & 비관적인락](https://raconer.tistory.com/entry/%EB%82%99%EA%B4%80%EC%A0%81%EC%9D%B8%EB%9D%BDOptimistic-Locking-%EB%B9%84%EA%B4%80%EC%A0%81%EC%9D%B8Pessimistic-Locking)
