@@ -7,6 +7,7 @@ import com.order.flow.data.dto.order.OrdersInfoDTO;
 import com.order.flow.data.dto.order.OrdersInsertDTO;
 import com.order.flow.data.entity.order.Orders;
 import com.order.flow.service.OrdersService;
+import com.order.flow.service.RedissonService;
 import jakarta.validation.Valid;
 import java.util.List;
 import lombok.AllArgsConstructor;
@@ -18,14 +19,14 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class OrdersController {
   private OrdersService ordersService;
-
+  private RedissonService redissonService;
   /*
    * 주문 접수처리
    */
   @PostMapping
   public ResponseEntity<?> order(@Valid @RequestBody OrdersInsertDTO order) {
 
-    this.ordersService.insert(order);
+    this.redissonService.insert(order);
 
     return ResponseEntity.ok("SUCCESS");
   }

@@ -15,7 +15,7 @@
 * 테스트
   * test.java.com.order.flow.OrdersControllerTest.java 에서 실행 및 결과 확인
     * 주문 접수 처리시 재고 부족시 : Exception 처리 (Random Data이다 보니 성공시 Check 만 현재 구현)
-    * Multi Thread로 동시성 테스트 필요 -> // TODO
+    * Multi Thread로 동시성 테스트 필요 -> // 2023.08.27 코드 변경 및 테스트 코드 작성
 ### Branch
 * master
   * feature/** 개발 완료 된 Branch Core
