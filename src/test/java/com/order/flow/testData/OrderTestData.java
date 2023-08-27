@@ -14,44 +14,80 @@ import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 
 public class OrderTestData {
-  private MultiValueMap<String, String> params = new LinkedMultiValueMap();
-  private Faker faker = new Faker();
+    private MultiValueMap<String, String> params = new LinkedMultiValueMap();
+    private Faker faker = new Faker();
 
-  public OrdersInsertDTO postOrderValidData() {
-    List<ItemInsertDTO> items = new ArrayList<>();
+    public OrdersInsertDTO postOrderValidData() {
+        List<ItemInsertDTO> items = new ArrayList<>();
 
-    return OrdersInsertDTO.builder()
-            .items(items)
-            .build();
-  }
+        return OrdersInsertDTO.builder()
+                .items(items)
+                .build();
+    }
 
-  public OrdersInsertDTO postOrderData() {
+    public OrdersInsertDTO postOrderData() {
 
-    List<ItemInsertDTO> items =
-        IntStream.range(0, this.faker.number().numberBetween(5, 10))
-            .mapToObj(i -> ItemInsertDTO.builder()
-                    .id(this.faker.number().numberBetween(1L, 50L))
-                    .quantity(this.faker.number().numberBetween(0, 10))
-                    .build())
-            .collect(Collectors.toList());
+        List<ItemInsertDTO> items =
+                IntStream.range(0, this.faker.number().numberBetween(1, 2))
+                        .mapToObj(i -> ItemInsertDTO.builder()
+                                .id(this.faker.number().numberBetween(1L, 50L))
+                                .quantity(this.faker.number().numberBetween(0, 10))
+                                .build())
+                        .collect(Collectors.toList());
 
-    return OrdersInsertDTO.builder()
-            .userId(this.faker.number().numberBetween(6L, 10L))
-            .deliveryAddress(this.faker.address().streetAddress())
-            .items(items)
-            .build();
-  }
+        return OrdersInsertDTO.builder()
+                .userId(this.faker.number().numberBetween(6L, 10L))
+                .deliveryAddress(this.faker.address().streetAddress())
+                .items(items)
+                .build();
+    }
 
-  public MultiValueMap<String, String> getSearchData() {
-    this.params.add("page", Integer.toString(1));
-    this.params.add("size", Integer.toString(30));
+    public List<OrdersInsertDTO> postOrderDataMultiThread() {
 
-    return params;
-  }
+        List<OrdersInsertDTO> orderList = new ArrayList();
+        List<ItemInsertDTO> items = new ArrayList();
 
-  public OrderSuccessDTO putData(){
-    return OrderSuccessDTO.builder()
-            .id(1L)
-            .build();
-  }
+        ItemInsertDTO item1 = ItemInsertDTO.builder()
+                .id(1L)
+                .quantity(1)
+                .build();
+
+        items.add(item1);
+
+        OrdersInsertDTO order1 = OrdersInsertDTO.builder()
+                .userId(6L)
+                .deliveryAddress(this.faker.address().streetAddress())
+                .items(items)
+                .build();
+        OrdersInsertDTO order2 = OrdersInsertDTO.builder()
+                .userId(7L)
+                .deliveryAddress(this.faker.address().streetAddress())
+                .items(items)
+                .build();
+        OrdersInsertDTO order3 =  OrdersInsertDTO.builder()
+                .userId(8L)
+                .deliveryAddress(this.faker.address().streetAddress())
+                .items(items)
+                .build();
+
+        orderList.add(order1);
+        orderList.add(order2);
+        orderList.add(order3);
+
+        return orderList;
+    }
+
+
+    public MultiValueMap<String, String> getSearchData() {
+        this.params.add("page", Integer.toString(1));
+        this.params.add("size", Integer.toString(30));
+
+        return params;
+    }
+
+    public OrderSuccessDTO putData() {
+        return OrderSuccessDTO.builder()
+                .id(1L)
+                .build();
+    }
 }
