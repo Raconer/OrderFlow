@@ -39,6 +39,8 @@ dependencies {
 
     // Validator
     implementation 'org.springframework.boot:spring-boot-starter-validation:3.1.2'
+    // Redis
+    implementation 'org.redisson:redisson-spring-boot-starter:3.21.1'
 
     // ANNOTATION
     compileOnly 'org.projectlombok:lombok'
